@@ -13,7 +13,12 @@ A keypair in the ansible project containing this role (preferably vault encrypte
 Role Variables
 --------------
 
-TBD
+    deploy_private_key:   "your_private_key"
+    deploy_public_key:    "your_public_key"
+    deploy_user:          "deploy"
+    deploy_key_name:      "your_repo_deploy_key"
+    deploy_key_full_path: "/home/{{ deploy_user }}/.ssh/{{ deploy_key_name }}"
+    deploy_debugging:     "{{ debugging | default(false) }}"
 
 Dependencies
 ------------
