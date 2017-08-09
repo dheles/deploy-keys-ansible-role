@@ -26,6 +26,7 @@ Dependencies
 None
 
 Example Playbook
+----------------
 
     - hosts: servers
       roles:

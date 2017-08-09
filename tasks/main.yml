@@ -1,4 +1,12 @@
 ---
+- name: install required packages
+  package:
+    name: "{{ item }}"
+    state: present
+  become: true
+  with_items:
+    - git
+
 - name: "Install user ssh private key"
   no_log: "{{ not deploy_debugging }}"
   copy:
@@ -14,17 +22,3 @@
     dest: "{{ deploy_key_full_path }}.pub"
     mode: 0644
     owner: "{{ deploy_user }}"
-
-- name: "Set user git email"
-  become_user: "{{ deploy_user }}"
-  git_config:
-    name: "user.email"
-    scope: global
-    value: "{{ deploy_user }}@{{ ansible_fqdn }}"
-
-- name: "Set user git name"
-  become_user: "{{ deploy_user }}"
-  git_config:
-    name: "user.name"
-    scope: global
-    value: "{{ deploy_user }}"
