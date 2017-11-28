@@ -7,18 +7,10 @@
   with_items:
     - git
 
-- name: "Install user ssh private key"
-  no_log: "{{ not deploy_debugging }}"
-  copy:
-    content: "{{ deploy_private_key }}"
-    dest: "{{ deploy_key_full_path }}"
-    mode: 0600
-    owner: "{{ deploy_user }}"
-
-- name: "Install user ssh public key"
-  no_log: "{{ not deploy_debugging }}"
-  copy:
-    content: "{{ deploy_public_key }}"
-    dest: "{{ deploy_key_full_path }}.pub"
-    mode: 0644
-    owner: "{{ deploy_user }}"
+- name: install keys
+  include: install_keys.yml
+  vars:
+    name:         "{{ item.name }}"
+    private_key:  "{{ item.private_key }}"
+    public_key:   "{{ item.public_key }}"
+  with_items:     "{{ deploy_keys }}"
