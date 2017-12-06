@@ -1,24 +1,31 @@
 Ansible Role: Deploy Keys
 =========
 
-Configures a user with (pre-existing) deploy keys for a private git repo
+Configures a user with (pre-existing) deploy keys for private git repos
 
 Requirements
 ------------
 
-An existing user
-A (private) git repo, with the public deploy key configured
-A keypair in the ansible project containing this role (preferably vault encrypted)
+- An existing user
+- One or more (private) git repos, with the public deploy keys configured
+- One or more keypairs in the ansible project containing this role (preferably vault encrypted)
 
 Role Variables
 --------------
 
-    deploy_private_key:   "your_private_key"
-    deploy_public_key:    "your_public_key"
-    deploy_user:          "deploy"
-    deploy_key_name:      "your_repo_deploy_key"
-    deploy_key_full_path: "/home/{{ deploy_user }}/.ssh/{{ deploy_key_name }}"
-    deploy_debugging:     "{{ debugging | default(false) }}"
+    deploy_user:      "deploy"
+    deploy_debugging: "{{ debugging | default(false) }}"
+    deploy_key_path:  "/home/{{ deploy_user }}/.ssh"
+    deploy_keys:
+      - name:         "your_first_repo_deploy_key_name"
+        private_key:  "your_first_private_key"
+        public_key:   "your_first_public_key"
+
+  optionally, for additional keys on the same server:
+  
+      - name:         "your_second_repo_deploy_key_name"
+        private_key:  "your_second_private_key"
+        public_key:   "your_second_public_key"
 
 Dependencies
 ------------
@@ -31,6 +38,16 @@ Example Playbook
     - hosts: servers
       roles:
          - { role: deploy-keys }
+
+if you have sets of keys stored for different servers, you can re-use the role like so:
+
+    - hosts: application
+      roles:
+         - { role: deploy-keys,  deploy_keys: "{{ app_deploy_keys }}" }
+
+     - hosts: solr
+       roles:
+          - { role: deploy-keys,  deploy_keys: "{{ solr_deploy_keys }}" }
 
 License
 -------

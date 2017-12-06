@@ -1,0 +1,16 @@
+- name: "Install user ssh private key"
+  no_log: "{{ not deploy_debugging }}"
+  copy:
+    content: "{{ private_key }}"
+    dest: "{{ deploy_key_path }}/{{ name }}"
+    mode: 0600
+    owner: "{{ deploy_user }}"
+
+# NOTE: not strictly necessary
+- name: "Install user ssh public key"
+  no_log: "{{ not deploy_debugging }}"
+  copy:
+    content: "{{ public_key }}"
+    dest: "{{ deploy_key_path }}/{{ name }}.pub"
+    mode: 0644
+    owner: "{{ deploy_user }}"
